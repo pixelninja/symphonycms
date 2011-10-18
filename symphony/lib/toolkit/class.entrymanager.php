@@ -133,9 +133,11 @@ class EntryManager
             $did_lock = Symphony::Database()->query("LOCK TABLES `$table_name` WRITE");
 
             // Delete old data
-            Symphony::Database()->delete($table_name, sprintf("
-                `entry_id` = %d", $entry_id
-            ));
+            Symphony::Database()->delete(
+                $table_name,
+                "`entry_id` = ?",
+                array($entry_id)
+            );
 
             // Insert new data
             $data = array(
@@ -217,7 +219,10 @@ class EntryManager
                 'modification_date_gmt' => $entry->get('modification_date_gmt')
             ),
             'tbl_entries',
-            sprintf(' `id` = %d', (int)$entry->get('id'))
+            '`id` = ?',
+            array(
+                $entry->get('id')
+            )
         );
 
         // Iterate over all data for this entry
@@ -332,7 +337,8 @@ class EntryManager
                 }
             }
 
-            Symphony::Database()->delete('tbl_entries', " `id` IN ('$entry_list') ");
+            $placeholders = Database::addPlaceholders($chunk);
+            Symphony::Database()->delete('tbl_entries', " `id` IN ($placeholders) ", $chunk);
         }
 
         return true;
@@ -620,10 +626,13 @@ class EntryManager
      */
     public static function fetchEntrySectionID($entry_id)
     {
-        return Symphony::Database()->fetchVar('section_id', 0, sprintf("
-            SELECT `section_id` FROM `tbl_entries` WHERE `id` = %d LIMIT 1",
-            $entry_id
-        ));
+        return Symphony::Database()->fetchVar('section_id', 0, "
+            SELECT `section_id`
+                FROM `tbl_entries`
+                WHERE `id` = ?
+                LIMIT 1",
+            array($entry_id)
+        );
     }
 
     /**

@@ -562,15 +562,16 @@ class FieldUpload extends Field implements ExportableField, ImportableField
 
     protected function getCurrentValues($entry_id)
     {
-        return Symphony::Database()->fetchRow(0, sprintf(
-            "SELECT `file`, `mimetype`, `size`, `meta`
-                FROM `tbl_entries_data_%d`
-                WHERE `entry_id` = %d
-                LIMIT 1
-            ",
-            $this->get('id'),
-            $entry_id
-        ));
+        return Symphony::Database()->fetchRow(0, sprintf("
+                SELECT `file`, `mimetype`, `size`, `meta`
+                    FROM `tbl_entries_data_%d`
+                    WHERE `entry_id` = ?
+                    LIMIT 1
+                ",
+                $this->get('id')
+            ),
+            array($entry_id)
+        );
     }
 
     /*-------------------------------------------------------------------------

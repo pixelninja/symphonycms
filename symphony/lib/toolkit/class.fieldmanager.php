@@ -147,7 +147,7 @@ class FieldManager implements FileResource
         $type = self::fetchFieldTypeFromID($field_id);
 
         // Delete the original settings:
-        Symphony::Database()->delete("tbl_fields_$type", sprintf("`field_id` = %d LIMIT 1", $field_id));
+        Symphony::Database()->delete("`tbl_fields_$type`", "`field_id` = ? LIMIT 1", array($field_id));
 
         // Insert the new settings into the type table:
         if (!isset($settings['field_id'])) {
@@ -172,7 +172,7 @@ class FieldManager implements FileResource
      */
     public static function edit($id, array $fields)
     {
-        if (!Symphony::Database()->update($fields, "tbl_fields", sprintf(" `id` = %d", $id))) {
+        if (!Symphony::Database()->update($fields, "tbl_fields", ' `id` = ?', array($id))) {
             return false;
         }
 
@@ -199,8 +199,8 @@ class FieldManager implements FileResource
         $existing = self::fetch($id);
         $existing->tearDown();
 
-        Symphony::Database()->delete('tbl_fields', sprintf(" `id` = %d", $id));
-        Symphony::Database()->delete('tbl_fields_'.$existing->handle(), sprintf(" `field_id` = %d", $id));
+        Symphony::Database()->delete('tbl_fields', "`id` = ?", array($id));
+        Symphony::Database()->delete('tbl_fields_'.$existing->handle(), "`field_id` = ?", array($id));
         SectionManager::removeSectionAssociation($id);
 
         if ($existing->requiresTable()) {
@@ -304,11 +304,11 @@ class FieldManager implements FileResource
             // Loop over the `ids` array, which is grouped by field type
             // and get the field context.
             foreach ($ids as $type => $field_id) {
+                $placeholders = Database::addPlaceholders($field_id);
                 $field_contexts[$type] = Symphony::Database()->fetch(sprintf(
                     "SELECT * FROM `tbl_fields_%s` WHERE `field_id` IN (%s)",
-                    $type,
-                    implode(',', $field_id)
-                ), 'field_id');
+                    $type, $placeholders
+                ), 'field_id', array(), $field_id);
             }
 
             foreach ($result as $f) {
@@ -372,10 +372,10 @@ class FieldManager implements FileResource
      */
     public static function fetchFieldTypeFromID($id)
     {
-        return Symphony::Database()->fetchVar('type', 0, sprintf("
-            SELECT `type` FROM `tbl_fields` WHERE `id` = %d LIMIT 1",
-            $id
-        ));
+        return Symphony::Database()->fetchVar('type', 0, "
+            SELECT `type` FROM `tbl_fields` WHERE `id` = ? LIMIT 1",
+            array($id)
+        );
     }
 
     /**
@@ -386,10 +386,10 @@ class FieldManager implements FileResource
      */
     public static function fetchHandleFromID($id)
     {
-        return Symphony::Database()->fetchVar('element_name', 0, sprintf("
-            SELECT `element_name` FROM `tbl_fields` WHERE `id` = %d LIMIT 1",
-            $id
-        ));
+        return Symphony::Database()->fetchVar('element_name', 0, "
+            SELECT `element_name` FROM `tbl_fields` WHERE `id` = ? LIMIT 1",
+            array($id)
+        );
     }
 
     /**
@@ -599,10 +599,10 @@ class FieldManager implements FileResource
      */
     public static function isFieldUsed($field_type)
     {
-        return Symphony::Database()->fetchVar('count', 0, sprintf(
-            "SELECT COUNT(*) AS `count` FROM `tbl_fields` WHERE `type` = '%s'",
-            $field_type
-        )) > 0;
+        return (int)Symphony::Database()->fetchVar('count', 0, "
+            SELECT COUNT(*) AS `count` FROM `tbl_fields` WHERE `type` = ?",
+            array($field_type)
+        ) > 0;
     }
 
     /**
@@ -624,8 +624,10 @@ class FieldManager implements FileResource
                     $table = Symphony::Database()->fetchVar('count', 0, sprintf(
                         "SELECT COUNT(*) AS `count`
                         FROM `tbl_fields_%s`
-                        WHERE `formatter` = '%s'",
-                        Symphony::Database()->cleanValue($field),
+                        WHERE `formatter` = ?",
+                        Symphony::Database()->cleanValue($field)
+                    ),
+                    array(
                         $text_formatter_handle
                     ));
                 } catch (DatabaseException $ex) {

@@ -77,27 +77,31 @@ class FieldTagList extends Field implements ExportableField, ImportableField
     public function fetchAssociatedEntryCount($value)
     {
         $value = array_map(array($this, 'cleanValue'), explode(',', $value));
-        $value = implode("','", $value);
+        $placeholders = Database::addPlaceholders($value);
         $count = (int)Symphony::Database()->fetchVar('count', 0, sprintf("
-            SELECT COUNT(handle) AS `count`
-            FROM `tbl_entries_data_%d`
-            WHERE `handle` IN ('%s')",
-            $this->get('id'),
+                SELECT COUNT(handle) AS `count`
+                FROM `tbl_entries_data_%d`
+                WHERE `handle` IN ($placeholders)",
+                $this->get('id')
+            ),
             $value
-        ));
+        );
 
         return $count;
     }
 
     public function fetchAssociatedEntryIDs($value)
     {
+        $value = array_map(array($this, 'cleanValue'), explode(',', $value));
+        $placeholders = Database::addPlaceholders($value);
         return Symphony::Database()->fetchCol('entry_id', sprintf("
-            SELECT `entry_id`
-            FROM `tbl_entries_data_%d`
-            WHERE `value` = '%s'",
-            $this->get('id'),
-            Symphony::Database()->cleanValue($value)
-        ));
+                SELECT `entry_id`
+                FROM `tbl_entries_data_%d`
+                WHERE `handle` IN ($placeholders)",
+                $this->get('id')
+            ),
+            $value
+        );
     }
 
     public function fetchAssociatedEntrySearchValue($data, $field_id = null, $parent_entry_id = null)

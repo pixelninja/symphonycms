@@ -11,7 +11,7 @@
 	 * @see XMLPage
 	 * @see JSONPage
 	 *
-	 * This class will be removed in Symphony 2.5
+	 * This class will be removed in Symphony 2.6
 	 */
 
 	require_once(TOOLKIT . '/class.xmlpage.php');

@@ -110,6 +110,8 @@
 		 * @see $this->setHttpStatus and self::$HTTP_STATUSES
 		 *
 		 * @var integer
+		 *
+		 * This member will be deleted in Symphony 2.5
 		 */
 		protected $_status = NULL;
 

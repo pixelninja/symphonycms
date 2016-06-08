@@ -239,6 +239,19 @@ class Field
     }
 
     /**
+     * Test whether this field can be editable directly in the
+     * entries table. Defaults to false.
+     *
+     * @since Symphony 2.7.0
+     * @return boolean
+     *  true if this can, false otherwise.
+     */
+    public function canEditInTableEntries()
+    {
+        return false;
+    }
+
+    /**
      * Test whether this field can be sorted. This default implementation
      * returns false.
      *
@@ -1290,6 +1303,10 @@ class Field
         $first = array_shift($filters);
         $help->setValue($first['help']);
         $wrapper->appendChild($help);
+    }
+
+    public function displayTableEditPanel(XMLElement &$wrapper)
+    {
     }
 
     /**

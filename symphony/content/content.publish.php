@@ -589,9 +589,8 @@ class contentPublish extends AdministrationPage
                 }
             }
 
-            $link_column = array_reverse($visible_columns);
-            $link_column = end($link_column);
             reset($visible_columns);
+            $link_column = current($visible_columns);
 
             foreach ($entries['records'] as $entry) {
                 $tableData = array();
@@ -613,17 +612,15 @@ class contentPublish extends AdministrationPage
 
                         $value = $field->prepareTableValue($data, ($column == $link_column) ? $link : null, $entry->get('id'));
 
-                        if (!is_object($value) && (strlen(trim($value)) == 0 || $value == __('None'))) {
-                            $value = ($position == 0 ? $link->generate() : __('None'));
-                        }
+                        $isEmpty = !is_object($value) && (strlen(trim($value)) === 0 || $value === __('None'));
 
-                        if ($value == __('None')) {
+                        if ($isEmpty) {
+                            $value = ($position === 0 ? $link->generate() : __('None'));
+
                             $tableData[] = Widget::TableData($value, 'inactive field-' . $column->get('type') . ' field-' . $column->get('id'));
                         } else {
                             $tableData[] = Widget::TableData($value, 'field-' . $column->get('type') . ' field-' . $column->get('id'));
                         }
-
-                        unset($field);
                     }
                 }
 

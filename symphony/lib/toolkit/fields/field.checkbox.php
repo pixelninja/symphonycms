@@ -69,7 +69,17 @@ class FieldCheckbox extends Field implements ExportableField, ImportableField
                 'title' => 'is',
                 'filter' => ' ',
                 'help' => __('Find values that are an exact match for the given string.')
-            )
+            ),
+            array(
+                'filter' => 'sql: NOT NULL',
+                'title' => 'is not empty',
+                'help' => __('Find entries with a non-empty value.')
+            ),
+            array(
+                'filter' => 'sql: NULL',
+                'title' => 'is empty',
+                'help' => __('Find entries with an empty value.')
+            ),
         );
     }
 
@@ -344,7 +354,11 @@ class FieldCheckbox extends Field implements ExportableField, ImportableField
         $field_id = $this->get('id');
         $default_state = ($this->get('default_state') == "on") ? 'yes' : 'no';
 
-        if ($andOperation) {
+        // SQL filtering: allows for NULL/NOT NULL statements
+        if (self::isFilterSQL($data[0])) {
+            $this->buildFilterSQL($data[0], array('value'), $joins, $where);
+
+        } elseif ($andOperation) {
             foreach ($data as $value) {
                 $this->_key++;
                 $value = $this->cleanValue($value);

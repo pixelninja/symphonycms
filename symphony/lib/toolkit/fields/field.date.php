@@ -68,7 +68,7 @@ class FieldDate extends Field implements ExportableField, ImportableField
         return array(
             array(
                 'title' => 'is',
-                'filter' => ' ',
+                'filter' => '',
                 'help' => __('Find values that are an exact match for the given string.')
             ),
             array(
@@ -83,14 +83,14 @@ class FieldDate extends Field implements ExportableField, ImportableField
             ),
             array(
                 'title' => 'contains',
-                'filter' => 'regexp: ',
+                'filter' => 'contains:',
                 'help' => __('Find values that match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))
             ),
             array(
                 'title' => 'does not contain',
-                'filter' => 'not-regexp: ',
+                'filter' => 'not-contains:',
                 'help' => __('Find values that do not match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))

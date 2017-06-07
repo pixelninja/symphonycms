@@ -53,7 +53,7 @@ class FieldUpload extends Field implements ExportableField, ImportableField
         return array(
             array(
                 'title' => 'is',
-                'filter' => ' ',
+                'filter' => '',
                 'help' => __('Find files that are an exact match for the given string.')
             ),
             array(
@@ -68,26 +68,26 @@ class FieldUpload extends Field implements ExportableField, ImportableField
             ),
             array(
                 'title' => 'contains',
-                'filter' => 'regexp: ',
+                'filter' => 'contains:',
                 'help' => __('Find files that match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))
             ),
             array(
                 'title' => 'does not contain',
-                'filter' => 'not-regexp: ',
+                'filter' => 'not-contains:',
                 'help' => __('Find files that do not match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))
             ),
             array(
                 'title' => 'file type is',
-                'filter' => 'mimetype: ',
+                'filter' => 'mimetype:',
                 'help' => __('Find files that match the given mimetype.')
             ),
             array(
                 'title' => 'size is',
-                'filter' => 'size: ',
+                'filter' => 'size:',
                 'help' => __('Find files that match the given size.')
             )
         );

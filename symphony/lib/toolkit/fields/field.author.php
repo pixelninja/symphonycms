@@ -434,12 +434,15 @@ class FieldAuthor extends Field implements ExportableField
         if (self::isFilterRegex($data[0])) {
             $this->_key++;
 
-            if (preg_match('/^regexp:/i', $data[0])) {
-                $pattern = preg_replace('/^regexp:\s*/i', null, $this->cleanValue($data[0]));
+            if (preg_match('/^(regexp|contains):/i', $data[0])) {
+                $pattern = preg_replace('/^(regexp|contains):\s*/i', null, $this->cleanValue($data[0]));
                 $regex = 'REGEXP';
-            } else {
-                $pattern = preg_replace('/^not-?regexp:\s*/i', null, $this->cleanValue($data[0]));
+            } elseif (preg_match('/^not-?(regexp|contains):\s*/i', $filter)) {
+                $pattern = preg_replace('/^not-?(regexp|contains):\s*/i', null, $this->cleanValue($data[0]));
                 $regex = 'NOT REGEXP';
+            } else {
+                $filter = $data[0];
+                throw new Exception("Filter `$filter` is not a Regexp filter");
             }
 
             if (strlen($pattern) == 0) {

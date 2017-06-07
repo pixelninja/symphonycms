@@ -1187,7 +1187,7 @@ class Field
         return array(
             array(
                 'title' => 'is',
-                'filter' => ' ',
+                'filter' => '',
                 'help' => __('Find values that are an exact match for the given string.')
             ),
             array(
@@ -1202,14 +1202,14 @@ class Field
             ),
             array(
                 'title' => 'contains',
-                'filter' => 'regexp: ',
+                'filter' => 'contains:',
                 'help' => __('Find values that match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))
             ),
             array(
                 'title' => 'does not contain',
-                'filter' => 'not-regexp: ',
+                'filter' => 'not-contains:',
                 'help' => __('Find values that do not match the given <a href="%s">MySQL regular expressions</a>.', array(
                     'https://dev.mysql.com/doc/mysql/en/regexp.html'
                 ))
@@ -1321,25 +1321,28 @@ class Field
      * Test whether the input string is a regular expression, by searching
      * for the prefix of `regexp:` or `not-regexp:` in the given `$string`.
      *
+     * @since Symphony 2.7.0 also accepts `contains:` and `not-contains:`
+     *
      * @param string $string
      *  The string to test.
      * @return boolean
-     *  True if the string is prefixed with `regexp:` or `not-regexp:`, false otherwise.
+     *  True if the string is prefixed with `regexp:`, `not-regexp:`,
+     *  `contains:` or `not-contains:`, false otherwise.
      */
     protected static function isFilterRegex($string)
     {
-        if (preg_match('/^regexp:/i', $string) || preg_match('/^not-?regexp:/i', $string)) {
-            return true;
-        }
+        return (boolean)(preg_match('/^(regexp|contains):/i', $string) || preg_match('/^not-?(regexp|contains):/i', $string));
     }
 
     /**
      * Builds a basic REGEXP statement given a `$filter`. This function supports
-     * `regexp:` or `not-regexp:`. Users should keep in mind this function
-     * uses MySQL patterns, not the usual PHP patterns, the syntax between these
+     * `regexp:`, `not-regexp:`, `contains:` or `not-contains:`.
+     * Users should keep in mind this function uses MySQL patterns,
+     * not the usual PHP patterns, the syntax between these
      * flavours differs at times.
      *
      * @since Symphony 2.3
+     * @since Symphony 2.7.0 also accepts `contains:` and `not-contains:`
      * @link https://dev.mysql.com/doc/refman/en/regexp.html
      * @param string $filter
      *  The full filter, eg. `regexp: ^[a-d]`
@@ -1363,12 +1366,12 @@ class Field
         $filter = $this->cleanValue($filter);
         $op = '';
 
-        if (preg_match('/^regexp:\s*/i', $filter)) {
-            $pattern = preg_replace('/^regexp:\s*/i', null, $filter);
+        if (preg_match('/^(regexp|contains):\s*/i', $filter)) {
+            $pattern = preg_replace('/^(regexp|contains):\s*/i', null, $filter);
             $regex = 'REGEXP';
             $op = 'OR';
-        } elseif (preg_match('/^not-?regexp:\s*/i', $filter)) {
-            $pattern = preg_replace('/^not-?regexp:\s*/i', null, $filter);
+        } elseif (preg_match('/^not-?(regexp|contains):\s*/i', $filter)) {
+            $pattern = preg_replace('/^not-?(regexp|contains):\s*/i', null, $filter);
             $regex = 'NOT REGEXP';
             $op = 'AND';
         } else {

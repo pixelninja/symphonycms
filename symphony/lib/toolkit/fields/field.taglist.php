@@ -623,7 +623,7 @@ class FieldTagList extends Field implements ExportableField, ImportableField
         return array(
             array(
                 'title' => 'is',
-                'filter' => ' ',
+                'filter' => '',
                 'help' => __('Find values that are an exact match for the given string.')
             ),
             array(
@@ -637,22 +637,22 @@ class FieldTagList extends Field implements ExportableField, ImportableField
                 'help' => __('Find entries where no value is selected.')
             ),
             array(
-                'filter' => 'sql-null-or-not: ',
+                'filter' => 'sql-null-or-not:',
                 'title' => 'is empty or not',
                 'help' => __('Find entries where no value is selected or it is not equal to this value.')
             ),
             array(
-                'filter' => 'not: ',
+                'filter' => 'not:',
                 'title' => 'is not',
                 'help' => __('Find entries where the value is not equal to this value.')
             ),
             array(
-                'filter' => 'regexp: ',
+                'filter' => 'contains:',
                 'title' => 'contains',
                 'help' => __('Find entries where the value matches the regex.')
             ),
             array(
-                'filter' => 'not-regexp: ',
+                'filter' => 'not-contains:',
                 'title' => 'does not contain',
                 'help' => __('Find entries where the value does not match the regex.')
             )

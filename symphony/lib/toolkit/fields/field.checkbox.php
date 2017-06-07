@@ -67,7 +67,7 @@ class FieldCheckbox extends Field implements ExportableField, ImportableField
         return array(
             array(
                 'title' => 'is',
-                'filter' => ' ',
+                'filter' => '',
                 'help' => __('Find values that are an exact match for the given string.')
             )
         );

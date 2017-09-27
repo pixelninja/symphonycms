@@ -174,6 +174,17 @@ module.exports = function (grunt) {
             }
         },
 
+        phpunit: {
+            classes: {
+                dir: 'tests/lib/toolkit'
+            },
+            options: {
+                bin: 'vendor/bin/phpunit',
+                //bootstrap: 'tests/test.bootstrap.php',
+                colors: true
+            }
+        },
+
         commitish: '',
         'git-rev-parse': {
             options: {
@@ -192,10 +203,11 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-phpcs');
+    grunt.loadNpmTasks('grunt-phpunit');
     grunt.loadNpmTasks('grunt-git-rev-parse');
 
     grunt.registerTask('default', ['css', 'js']);
     grunt.registerTask('css', ['git-rev-parse', 'concat', 'autoprefixer', 'csso']);
-    grunt.registerTask('php', ['phpcs']);
+    grunt.registerTask('php', ['phpcs', 'phpunit']);
     grunt.registerTask('js', ['git-rev-parse', 'uglify']);
 };

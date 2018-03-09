@@ -662,6 +662,6 @@ class EntryManager
      */
     public function selectCount($col = '*')
     {
-        return (new EntryQuery(Symphony::Database()))->projection(["COUNT(e.$col)"]);
+        return (new EntryQuery(Symphony::Database()))->projection(["COUNT($col)"]);
     }
 }

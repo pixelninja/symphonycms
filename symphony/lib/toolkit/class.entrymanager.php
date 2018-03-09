@@ -659,6 +659,7 @@ class EntryManager
 
     /**
      * Factory method that creates a new EntryQuery that only counts results.
+     * It disables the default sort since it is not required.
      *
      * @since Symphony 3.0.0
      * @see select()
@@ -668,6 +669,8 @@ class EntryManager
      */
     public function selectCount($col = '*')
     {
-        return (new EntryQuery(Symphony::Database()))->projection(["COUNT($col)"]);
+        return (new EntryQuery(Symphony::Database()))
+            ->projection(["COUNT($col)"])
+            ->disableDefaultSort();
     }
 }

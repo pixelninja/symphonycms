@@ -487,7 +487,11 @@ class AdministrationPage extends HTMLPage
         $h1->appendChild(
             Widget::Anchor(
                 '<span><span>' . Symphony::Configuration()->get('sitename', 'general') . '</span></span>',
-                rtrim(URL, '/') . '/'
+                rtrim(URL, '/') . '/',
+                null,
+                null,
+                null,
+                array('target' => '_blank')
             )
         );
         $this->Header->appendChild($h1);

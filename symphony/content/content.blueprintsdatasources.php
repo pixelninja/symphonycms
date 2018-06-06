@@ -1014,6 +1014,7 @@ class contentBlueprintsDatasources extends ResourcesPage
 
         $this->Header->setAttribute('class', 'spaced-bottom');
         $this->Context->setAttribute('class', 'spaced-right');
+        $this->Contents->setAttribute('class', 'centered-content');
         $div = new XMLElement('div');
         $div->setAttribute('class', 'actions');
         $div->appendChild(
@@ -1062,6 +1063,8 @@ class contentBlueprintsDatasources extends ResourcesPage
             )
         );
         $this->Form->setAttribute('id', 'controller');
+
+        $this->Contents->setAttribute('class', 'centered-content');
 
         $link = $about['author']['name'];
 

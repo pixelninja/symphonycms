@@ -144,9 +144,14 @@ class contentBlueprintsEvents extends ResourcesPage
             )));
         }
         $this->appendSubheading(($isEditing ? $about['name'] : __('Untitled')));
-        $this->insertBreadcrumbs(array(
-            Widget::Anchor(__('Events'), SYMPHONY_URL . '/blueprints/events/'),
-        ));
+        $this->insertBreadcrumbs(
+            array(
+                Widget::Anchor(
+                    Widget::SVGIcon('arrow') . __('Events'),
+                    SYMPHONY_URL . '/blueprints/events/'
+                ),
+            )
+        );
 
         if (!$readonly) {
             $fieldset = new XMLElement('fieldset');
@@ -374,6 +379,8 @@ class contentBlueprintsEvents extends ResourcesPage
                 )
             );
         }
+
+        $div->appendChild(Widget::SVGIcon('chevron'));
 
         if (!$readonly) {
             $this->Form->appendChild($div);

@@ -210,11 +210,6 @@ class contentBlueprintsPages extends AdministrationPage
 
         $this->Form->appendChild($table);
 
-        $version = new XMLElement('p', 'Symphony ' . Symphony::Configuration()->get('version', 'symphony'), array(
-            'id' => 'version'
-        ));
-        $this->Form->appendChild($version);
-
         $tableActions = new XMLElement('div');
         $tableActions->setAttribute('class', 'actions');
 
@@ -557,6 +552,7 @@ class contentBlueprintsPages extends AdministrationPage
             ]
         );
 
+        $this->Header->setAttribute('class', 'spaced-bottom');
         $this->Context->setAttribute('class', 'spaced-right');
         $div = new XMLElement('div');
         $div->setAttribute('class', 'actions');

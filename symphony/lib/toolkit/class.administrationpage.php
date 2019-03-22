@@ -450,7 +450,7 @@ class AdministrationPage extends HTMLPage
         // Initialise page containers
         $this->Wrapper = new XMLElement('div', null, array('id' => 'wrapper'));
         $this->Header = new XMLElement('header', null, array('id' => 'header'));
-        $this->Session = new XMLElement('div', null, array('id' => 'session'));
+        $this->Session = new XMLElement('div', null, array('class' => 'session'));
         $this->Context = new XMLElement('div', null, array('id' => 'context'));
         $this->Breadcrumbs = new XMLElement('div', null, array('id' => 'breadcrumbs'));
         $this->Contents = new XMLElement('div', null, array('id' => 'contents', 'role' => 'main'));
@@ -537,8 +537,8 @@ class AdministrationPage extends HTMLPage
         $this->appendNavigation();
 
         $this->Tools->appendChild($this->Session);
+        $this->Header->appendChild($this->Session); // For mobile
         $this->Header->appendChild($version);
-
         // Add Breadcrumbs
         $this->Context->prependChild($this->Breadcrumbs);
         $this->Contents->appendChild($this->Form);
@@ -700,8 +700,14 @@ class AdministrationPage extends HTMLPage
     {
         $this->Wrapper->appendChild($this->Header);
 
+        $this->Wrapper->appendChild(new XMLElement('div', null, array(
+            'class' => 'js-symphony-close-header',
+            'id' => 'mobile-bg-menu-toggler',
+        )));
+
         $mobileNavToggler = new XMLElement('a', Widget::SVGIcon('burger'));
         $mobileNavToggler->setAttribute('id', 'btn-toggle-header-mobile');
+        $mobileNavToggler->setAttribute('class', 'js-symphony-close-header');
         $this->Context->prependChild($mobileNavToggler);
 
         // Add horizontal drawers (inside #context)
@@ -724,6 +730,7 @@ class AdministrationPage extends HTMLPage
 
         $this->Wrapper->appendChild($this->Contents);
 
+        $this->Body->setAttribute('data-version', Symphony::Configuration()->get('version', 'symphony'));
         $this->Body->appendChild(new XMLElement('div', null, array('id' => 'loading')));
         $this->Body->appendChild($this->Wrapper);
 

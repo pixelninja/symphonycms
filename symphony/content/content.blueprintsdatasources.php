@@ -41,6 +41,7 @@ class contentBlueprintsDatasources extends ResourcesPage
 
     public function __form()
     {
+        $formInner = new XMLElement('div', null, array('class' => 'inner'));
         $formHasErrors = (is_array($this->_errors) && !empty($this->_errors));
 
         if ($formHasErrors) {
@@ -294,7 +295,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         }
 
         $fieldset->appendChild($group);
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Conditions
         $fieldset = new XMLElement('fieldset');
@@ -331,7 +332,7 @@ class contentBlueprintsDatasources extends ResourcesPage
 
         $fieldset->appendChild($group);
 
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         $fieldset = new XMLElement('fieldset');
         $this->setContext($fieldset, array('sections', 'system'));
@@ -352,7 +353,7 @@ class contentBlueprintsDatasources extends ResourcesPage
 
         $fieldset->appendChild($group);
 
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Filters
         $fieldset = new XMLElement('fieldset');
@@ -619,7 +620,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         $div->appendChild($ol);
 
         $fieldset->appendChild($div);
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Sorting
         $fieldset = new XMLElement('fieldset');
@@ -704,7 +705,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         $div->appendChild($orders);
 
         $fieldset->appendChild($div);
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Grouping
         $fieldset = new XMLElement('fieldset');
@@ -735,7 +736,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         $label->appendChild(Widget::Select('fields[group]', $options));
         $fieldset->appendChild($label);
 
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Pagination
         $fieldset = new XMLElement('fieldset');
@@ -785,7 +786,7 @@ class contentBlueprintsDatasources extends ResourcesPage
 
         $label = Widget::Checkbox('fields[paginate_results]', $fields['paginate_results'], __('Enable pagination'));
         $fieldset->appendChild($label);
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Content
         $fieldset = new XMLElement('fieldset');
@@ -954,7 +955,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         $group->appendChild($col);
         $fieldset->appendChild($group);
 
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Static XML
         if (!isset($fields['static_xml'])) {
@@ -982,7 +983,7 @@ class contentBlueprintsDatasources extends ResourcesPage
             $fieldset->appendChild($label);
         }
 
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
         // Connections
         $fieldset = new XMLElement('fieldset');
@@ -1014,7 +1015,7 @@ class contentBlueprintsDatasources extends ResourcesPage
         $div->appendChild($label);
 
         $fieldset->appendChild($div);
-        $this->Form->appendChild($fieldset);
+        $formInner->appendChild($fieldset);
 
 
         // Call the provided datasources to let them inject their filters
@@ -1026,6 +1027,8 @@ class contentBlueprintsDatasources extends ResourcesPage
                 call_user_func_array(array($providerClass, 'buildEditor'), array($this->Form, &$this->_errors, $fields, $handle));
             }
         }
+
+        $this->Form->appendChild($formInner);
 
         $this->Header->setAttribute('class', 'spaced-bottom');
         $this->Contents->setAttribute('class', 'centered-content');

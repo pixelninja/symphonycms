@@ -519,6 +519,11 @@ class AdministrationPage extends HTMLPage
             )
         );
 
+        $this->Tools->appendChild(Widget::Anchor(
+            'index',
+            rtrim(URL, '/') . '/'
+        ));
+
         $this->appendUserLinks();
         $this->appendNavigation();
 

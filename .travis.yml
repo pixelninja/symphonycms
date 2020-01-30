@@ -1,5 +1,7 @@
 language: php
-
+os:
+  - linux
+version: ~> 1.0
 php:
   - 7.4
   - 7.3
@@ -10,16 +12,13 @@ php:
   - nightly
   #- hhvm # until phpunit supports it
 
-matrix:
+jobs:
   fast_finish: true
   allow_failures:
     - php: 7.4
     - php: nightly
     - php: hhvm
     - php: 5.6
-
-# we need sudo to install apache
-sudo: required
 
 # services we need to start
 services:
@@ -69,9 +68,7 @@ after_success:
   - bash <(curl -s https://codecov.io/bash)
 
 cache:
-  npm: true
-  composer: true
   directories:
-    - $HOME/.composer/cache
-    - node_modules
-    - vendor
+  - $HOME/.composer/cache
+  - node_modules
+  - vendor

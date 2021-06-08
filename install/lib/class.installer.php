@@ -17,14 +17,6 @@ class Installer extends Administration
         self::$Profiler = Profiler::instance();
         self::$Profiler->sample('Engine Initialisation');
 
-        if (get_magic_quotes_gpc()) {
-            General::cleanArray($_SERVER);
-            General::cleanArray($_COOKIE);
-            General::cleanArray($_GET);
-            General::cleanArray($_POST);
-            General::cleanArray($_REQUEST);
-        }
-
         // Include the default Config for installation.
         include(INSTALL . '/includes/config_default.php');
         static::initialiseConfiguration($settings);

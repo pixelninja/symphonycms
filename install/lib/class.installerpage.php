@@ -351,6 +351,17 @@ class InstallerPage extends HTMLPage
         $User->appendChild(new XMLElement('legend', __('User Information')));
         $User->appendChild(new XMLElement('p', __('Once installation is complete, you will be able to log in to the Symphony admin area with these user details.')));
 
+        if (!isset($fields['user'])) {
+            $fields['user'] = array(
+                'username' => '',
+                'password' => '',
+                'confirm-password' => '',
+                'firstname' => '',
+                'lastname' => '',
+                'email' => ''
+            );
+        }
+
         // Username
         $label = Widget::Label(__('Username'), Widget::Input('fields[user][username]', $fields['user']['username']));
 

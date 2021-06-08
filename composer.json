@@ -20,7 +20,7 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "2.*",
-        "phpunit/phpunit": "9.2.*",
+        "phpunit/phpunit": "9.3.*",
         "phpunit/phpcov": "8.2.*"
     },
     "minimum-stability": "stable",
